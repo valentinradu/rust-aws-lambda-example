@@ -1,0 +1,27 @@
+[package]
+name = "be_techpilot"
+version = "0.1.0"
+authors = ["Valentin Radu <radu.v.valentin@me.com>"]
+edition = "2018"
+
+[dependencies]
+lambda_runtime = "0.2.1"
+lambda_http = "0.1.1"
+serde = "^1"
+serde_json = "^1"
+serde_derive = "^1"
+log = "^0.4"
+simple_logger = "^1"
+tokio = { version = "^0.3", features = ["full"] }
+
+[[bin]]
+name = "like"
+path = "src/like.rs"
+
+[[bin]]
+name = "article"
+path = "src/article.rs"
+
+[[bin]]
+name = "subscribe"
+path = "src/subscribe.rs"

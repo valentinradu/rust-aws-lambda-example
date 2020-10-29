@@ -1,0 +1,22 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/dist": true,
+        "**/Cargo.lock": true,
+        "**/target": true,
+        "**/.aws-sam": true
+    },
+    "editor.formatOnSave": false,
+    "editor.formatOnType": false,
+    "editor.quickSuggestions": false,
+    "editor.suggestOnTriggerCharacters": false,
+    "editor.parameterHints.enabled": false,
+    "editor.hover.enabled": false,
+    "editor.minimap.enabled": false,
+    "extensions.ignoreRecommendations": true,
+    "debug.openDebug": "neverOpen",
+}

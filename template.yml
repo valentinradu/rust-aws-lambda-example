@@ -1,0 +1,123 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Backend for techpilot.dev
+
+Transform:
+- AWS::Serverless-2016-10-31
+
+Parameters:
+  DomainName:
+    Type: String
+    Default: be.techpilot.dev
+  FrontendURL:
+    Type: String
+    Default: https://techpilot.dev
+  ValidOrigins:
+    Type: String
+    Default: https://techpilot.dev,https://www.techpilot.dev
+
+Globals:
+  Api:
+    Cors:
+      AllowMethods: "'*'"
+      AllowHeaders: "'*'"
+      AllowOrigin: "'*'"
+  Function:
+    Environment:
+      Variables:
+        FRONTEND_URL: !Ref FrontendURL
+        VALID_ORIGINS: !Ref ValidOrigins
+
+Resources:
+  Cert:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Ref DomainName
+      ValidationMethod: DNS
+
+  AppDomainName:
+    Type: AWS::ApiGateway::DomainName
+    Properties:
+      CertificateArn: !Ref Cert
+      DomainName: !Ref DomainName
+
+  APIBasePathMapping:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties:
+      DomainName: !Ref AppDomainName
+      RestApiId: !Ref ServerlessRestApi
+      Stage: !Ref ServerlessRestApiProdStage
+
+  SubscribePersistance:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: subscribe
+      PrimaryKey:
+        Name: id
+        Type: String
+
+  ArticlePersistance:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: article
+      PrimaryKey:
+        Name: id
+        Type: String
+
+  Subscribe:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: Subscribe
+      Handler: doesnt.matter
+      Runtime: provided
+      MemorySize: 128
+      Timeout: 10
+      CodeUri: .
+      Description: Subscribes a new reader to the mailing list
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonDynamoDBFullAccess
+      Events:
+        subscribe:
+          Type: Api
+          Properties:
+            Path: /subscribe
+            Method: post
+  Like:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: Like
+      Handler: doesnt.matter
+      Runtime: provided
+      MemorySize: 128
+      Timeout: 10
+      CodeUri: .
+      Description: Likes a post
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonDynamoDBFullAccess
+      Events:
+        like:
+          Type: Api
+          Properties:
+            Path: /like
+            Method: post
+  Article:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: Article
+      Handler: doesnt.matter
+      Runtime: provided
+      MemorySize: 128
+      Timeout: 10
+      CodeUri: .
+      Description: Returns the article views and likes
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonDynamoDBFullAccess
+      Events:
+        article:
+          Type: Api
+          Properties:
+            Path: /article/{id}
+            Method: get

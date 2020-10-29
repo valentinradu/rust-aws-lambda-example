@@ -1,0 +1,10 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "be-techpilot-dev"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-vsi58wxwsrje"
+s3_prefix = "be-techpilot-dev"
+region = "us-east-1"
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "DomainName=\"be.techpilot.dev\""
